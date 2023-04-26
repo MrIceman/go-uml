@@ -27,15 +27,17 @@ type Diagram struct {
 	renderedParticipants []*participant
 	participantsCoordMap map[string]participantCoord
 
-	dc    *gg.Context
-	title string
+	dc       *gg.Context
+	title    string
+	filename string
 }
 
-func NewDiagram() *Diagram {
+func NewDiagram(filename string) *Diagram {
 	coordMap := make(map[string]participantCoord)
 
 	return &Diagram{
 		participantsCoordMap: coordMap,
+		filename:             filename,
 	}
 }
 
@@ -49,7 +51,7 @@ func (d *Diagram) Render() {
 	d.renderParticipants()
 	d.renderEdges()
 
-	d.dc.SavePNG("out.png")
+	d.dc.SavePNG(fmt.Sprintf("%s.png", d.filename))
 }
 
 func (d *Diagram) renderTitle() {

@@ -3,7 +3,7 @@ package main
 import "go-uml/sequence"
 
 func main() {
-	d := sequence.NewDiagram()
+	d := sequence.NewDiagram("user_starts_chatting")
 
 	client := "Client"
 	backend := "Backend"

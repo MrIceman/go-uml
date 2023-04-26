@@ -36,3 +36,5 @@ and you won't find some functionalities yet such as
 	d.Render()
 
 ```
+Result PNG file: 
+![image description](./examples/user_starts_chatting.png)
