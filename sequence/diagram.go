@@ -1,0 +1,239 @@
+package sequence
+
+import (
+	"fmt"
+	"github.com/fogleman/gg"
+	"image/color"
+	"log"
+)
+
+const (
+	participantBoxWidth  = 100.0
+	participantBoxHeight = 50.0
+	participantsPadding  = 32
+
+	rectangleStrokeWidth = 2.0
+	lineStrokeWidth      = 1.0
+
+	verticalSpaceBetweenEdges = 50
+
+	width  = 1000
+	height = 1000
+)
+
+type Diagram struct {
+	participants         []participant
+	edges                []edge
+	renderedParticipants []*participant
+	participantsCoordMap map[string]participantCoord
+
+	dc    *gg.Context
+	title string
+}
+
+func NewDiagram() *Diagram {
+	coordMap := make(map[string]participantCoord)
+
+	return &Diagram{
+		participantsCoordMap: coordMap,
+	}
+}
+
+func (d *Diagram) Render() {
+	d.dc = gg.NewContext(width, height)
+	d.dc.DrawRectangle(0, 0, width, height)
+	d.dc.SetColor(color.White)
+	d.dc.Fill()
+
+	d.renderTitle()
+	d.renderParticipants()
+	d.renderEdges()
+
+	d.dc.SavePNG("out.png")
+}
+
+func (d *Diagram) renderTitle() {
+	s := d.title
+	textWidth, _ := d.dc.MeasureString(s)
+	centerX := float64(d.dc.Width())/2.0 - float64(textWidth)/2.0
+	log.Printf("title: %s", d.title)
+	d.dc.SetColor(color.Black)
+	d.dc.DrawString(s, centerX, height*0.05)
+	d.dc.Stroke()
+}
+
+func (d *Diagram) renderParticipants() {
+	for idx := range d.participants {
+		p := &d.participants[idx]
+
+		for rIdx := range d.renderedParticipants {
+			if d.renderedParticipants[rIdx].Name == p.Name {
+				return
+			}
+		}
+		spacePerBlock := float64(d.dc.Width() / len(d.participants))
+		startX := spacePerBlock*float64(len(d.renderedParticipants)+1) - spacePerBlock/2 - participantsPadding
+		// startX := float64(participantsPadding + (len(d.renderedParticipants) * (participantBoxWidth + 1000/(len(d.participants)))))
+		endX := startX + participantBoxWidth
+		startY := 1000 * 0.1 // 10% from the top
+		endY := startY + participantBoxHeight
+		// draw the border
+		d.dc.SetColor(color.Black)
+		d.dc.SetLineWidth(rectangleStrokeWidth)
+		d.dc.SetFillRule(gg.FillRuleEvenOdd)
+
+		d.dc.DrawLine(startX, startY, endX, startY)
+		d.dc.Stroke()
+
+		d.dc.DrawLine(startX, endY, endX, endY)
+		d.dc.Stroke()
+
+		d.dc.DrawLine(startX, startY, startX, endY)
+		d.dc.Stroke()
+
+		d.dc.DrawLine(endX, startY, endX, endY)
+		d.dc.Stroke()
+
+		d.dc.SetColor(color.Gray{Y: 230})
+		d.dc.DrawRectangle(
+			startX,
+			startY,
+			participantBoxWidth,
+			participantBoxHeight,
+		)
+		d.dc.SetColor(color.Black)
+		strWidth, strHeight := d.dc.MeasureString(p.Name)
+		centerStrWidth := startX + ((endX - startX) / 2) - strWidth/2
+		centerStrHeight := (endY-startY)/2 + startY + (strHeight / 2)
+
+		d.dc.DrawString(
+			p.Name,
+			centerStrWidth,
+			centerStrHeight,
+		)
+		d.dc.Stroke()
+
+		// render vertical action line for each participant
+		centerX := startX + (endX-startX)/2 - 2.5
+		lineStartY := endY + 2.5
+		lineEndY := float64(len(d.edges)*(verticalSpaceBetweenEdges)) + lineStartY + verticalSpaceBetweenEdges // padding
+
+		d.dc.SetLineWidth(lineStrokeWidth)
+		d.dc.DrawLine(centerX, lineStartY, centerX, lineEndY)
+		d.dc.Stroke()
+		d.renderedParticipants = append(d.renderedParticipants, p)
+
+		d.participantsCoordMap[p.Name] = participantCoord{
+			X: startX,
+			Y: startY,
+		}
+	}
+}
+
+func (d *Diagram) renderEdges() {
+	renderedEdges := 0
+
+	for idx := range d.edges {
+		e := &d.edges[idx]
+		fromCords := d.participantsCoordMap[e.from.Name]
+		toCords := d.participantsCoordMap[e.to.Name]
+		startX := fromCords.X + participantBoxWidth/2 - 2.5 // 2.5 = half of stroke width
+		startY := fromCords.Y + participantBoxHeight + 2.5 + float64((1+renderedEdges)*verticalSpaceBetweenEdges)
+		endX := toCords.X + participantBoxWidth/2 - 2.5
+		isReverseEdge := endX < startX
+
+		d.dc.SetDash(6)
+		d.dc.DrawLine(
+			startX,
+			startY,
+			endX,
+			startY)
+		d.dc.Stroke()
+
+		d.dc.SetDash()
+
+		if e.directional {
+			arrowTipStartX := endX
+			var arrowTipEndX float64
+
+			if isReverseEdge {
+				arrowTipEndX = arrowTipStartX + 10
+			} else {
+				arrowTipEndX = arrowTipStartX - 10
+			}
+			d.dc.DrawLine(arrowTipStartX, startY, arrowTipEndX, startY-10)
+			d.dc.DrawLine(arrowTipStartX, startY, arrowTipEndX, startY+10)
+			d.dc.Stroke()
+		}
+
+		if e.Label != "" {
+			textWidth, textHeight := d.dc.MeasureString(e.Label)
+			textY := startY + textHeight
+			textX := startX
+			if isReverseEdge {
+				textX -= participantsPadding / 2
+				textX -= textWidth
+			} else {
+				textX += participantsPadding / 2
+			}
+
+			d.dc.DrawString(e.Label, textX, textY)
+		}
+
+		renderedEdges++
+	}
+}
+
+func (d *Diagram) AddParticipant(name string) {
+	for i := range d.participants {
+		if d.participants[i].Name == name {
+			return
+		}
+	}
+	d.participants = append(d.participants, participant{Name: name})
+}
+
+func (d *Diagram) AddDirectionalEdge(from, to string, label string) error {
+	var fromPar *participant
+	var toPar *participant
+	for i := range d.participants {
+		if d.participants[i].Name == from {
+			fromPar = &d.participants[i]
+		}
+		if d.participants[i].Name == to {
+			toPar = &d.participants[i]
+		}
+	}
+	if fromPar == nil {
+		panic(fmt.Sprintf("participant \"%s\" not found", from))
+	}
+	if toPar == nil {
+		panic(fmt.Sprintf("participant \"%s not found", to))
+	}
+
+	d.edges = append(d.edges, edge{from: *fromPar, to: *toPar, Label: label, directional: true})
+	return nil
+}
+
+func (d *Diagram) AddUndirectionalEdge(from, to string, label string) error {
+	var fromPar *participant
+	var toPar *participant
+	for i := range d.participants {
+		if d.participants[i].Name == from {
+			fromPar = &d.participants[i]
+		}
+		if d.participants[i].Name == to {
+			toPar = &d.participants[i]
+		}
+	}
+	if fromPar == nil || toPar == nil {
+		return fmt.Errorf("participant not found")
+	}
+
+	d.edges = append(d.edges, edge{from: *fromPar, to: *toPar, Label: label, directional: false})
+	return nil
+}
+
+func (d *Diagram) SetTitle(s string) {
+	d.title = s
+}
