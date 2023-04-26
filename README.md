@@ -1,8 +1,13 @@
 # go-uml
-Just a little tool to create UML Diagrams built in Go. You can use it to build simple sequence diagrams, however, this project is still under development
+Just a little tool to create UML Diagrams built in Go. You can use it already to build simple sequence diagrams, however, this project is still under development
 and you won't find some functionalities yet such as
 
 - provide conditional flows
+
+The generated diagram is saved as .PNG file
+
+So far you can create only sequence diagrams and add Participants, directional and undirectional edges, labels for edges and set a title for the diagram.
+I'll be updating this repository whenever I need the tool to support more functionality, feel free to create an Issue with a feature request. Since I just started this project, contributing should also be quite easy (I appreciate any contribution)
 
 # Example
 
