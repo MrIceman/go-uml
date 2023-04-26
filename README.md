@@ -11,6 +11,9 @@ I'll be updating this repository whenever I need the tool to support more functi
 
 You don't need to download any dependencies such as plantUML or Graphviz, which is what most of the tools out there require and what was also my motivation to start this project. go-uml is using a 2D graphics engine written 100% in Go https://github.com/fogleman/gg
 
+Because of my personal philosophy I write any code in this repository 100% on my own, no Github Co-Pilot nor ChatGPT.
+I became a software developer because of my passion for our craft - Software Engineering. I build this tool because I enjoy programming.
+
 # Example
 
 ```
