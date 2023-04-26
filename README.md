@@ -7,7 +7,9 @@ and you won't find some functionalities yet such as
 The generated diagram is saved as .PNG file
 
 So far you can create only sequence diagrams and add Participants, directional and undirectional edges, labels for edges and set a title for the diagram.
-I'll be updating this repository whenever I need the tool to support more functionality, feel free to create an Issue with a feature request. Since I just started this project, contributing should also be quite easy (I appreciate any contribution)
+I'll be updating this repository whenever I need the tool to support more functionality, feel free to create an Issue with a feature request. Since I just started this project, contributing should also be quite easy (I appreciate any contribution).
+
+You don't need to download any dependencies such as plantUML or Graphviz. go-uml is using a 2D graphics engine written 100% in Go https://github.com/fogleman/gg
 
 # Example
 
