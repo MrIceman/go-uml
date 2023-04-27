@@ -186,13 +186,15 @@ func (d *Diagram) renderEdges() {
 	}
 }
 
-func (d *Diagram) AddParticipant(name string) {
-	for i := range d.participants {
-		if d.participants[i].Name == name {
-			return
+func (d *Diagram) AddParticipants(name ...string) {
+	for _, n := range name {
+		for i := range d.participants {
+			if d.participants[i].Name == n {
+				return
+			}
 		}
+		d.participants = append(d.participants, participant{Name: n})
 	}
-	d.participants = append(d.participants, participant{Name: name})
 }
 
 func (d *Diagram) AddDirectionalEdge(from, to string, label string) error {
