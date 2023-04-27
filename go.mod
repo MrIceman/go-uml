@@ -1,4 +1,4 @@
-module go-uml
+module github.com/mriceman/go-uml
 
 go 1.20
 
