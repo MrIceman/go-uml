@@ -44,7 +44,11 @@ You don't need to download any dependencies such as plantUML or Graphviz, which 
 
 ```
 Result PNG file: 
-![image description](./examples/user_starts_chatting.png)
+![Sequence Diagram generated based on above code](./examples/user_starts_chatting.png)
+
+Some more examples:
+![example_a](./examples/on_new_message_for_user_b_not_read.png)
+![example_a](./examples/on_new_message_for_user_b.png)
 
 ## Warning - AI not welcome here
 Because of my own personal philosophy regarding technology and AI, all the code in this repository that was written by me - I wrote 100% on my own. There is and will be no usage of Github Co-Pilot or any other AI tool. I became a software developer because of my passion for our craft - Software Engineering. I build this tool because I enjoy programming. Every single line of code you'll read in this repo, that was written by me, is produced first in my mind and then manifested into reality through my hands. I encourage any contributor to follow the same principle, though I can't and don't want to put any restrictions on this.
