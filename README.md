@@ -21,9 +21,8 @@ You don't need to download any dependencies such as plantUML or Graphviz, which 
 	db := "DynamoDB"
 
 	d.SetTitle("User initiates chat with another User")
-	d.AddParticipant(client)
-	d.AddParticipant(backend)
-	d.AddParticipant(db)
+	
+	d.AddParticipants(client, backend, db)
 
 	d.AddDirectionalEdge(client, backend, "PUT /chat/user/<TO_ID>")
 	d.AddDirectionalEdge(backend, db, "checks or create inbox for user")
