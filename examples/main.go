@@ -1,6 +1,6 @@
 package main
 
-import "go-uml/sequence"
+import "github.com/mriceman/go-uml/sequence"
 
 func main() {
 	d := sequence.NewDiagram("user_starts_chatting")
