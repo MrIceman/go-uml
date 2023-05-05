@@ -20,7 +20,7 @@ go get -u github.com/mriceman/go-uml
 
 Make sure you are executing this in a go project, other wise you have to run
 
-```go mod init```
+```go mod init <project-name>```
 
 first
 
