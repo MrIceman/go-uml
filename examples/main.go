@@ -5,11 +5,11 @@ import "github.com/mriceman/go-uml/sequence"
 func main() {
 	userStartsChatting()
 	userBIsNotPartOfChat()
-	UserBIsPartOfChat()
+	userBIsPartOfChat()
 
 }
 
-func UserBIsPartOfChat() {
+func userBIsPartOfChat() {
 	d := sequence.NewDiagram("on_new_message_for_user_b")
 
 	usrA := "User A"

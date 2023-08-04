@@ -6,10 +6,10 @@ and you won't find some functionalities yet such as
 
 The generated diagram is saved as .PNG file
 
-So far, you can create only sequence diagrams and add Participants, directional and undirectional Edges, labels for Edges and set a Title for the diagram.
+So far, you can create only sequence diagrams and add Participants, directional and non-directional Edges, labels for Edges and set a Title for the diagram.
 I'll be updating this repository whenever I need the tool to support more functionality, feel free to create an Issue with a feature request. Since I just started this project, contributing should also be quite easy (I appreciate any contribution).
 
-You don't need to download any dependencies such as plantUML or Graphviz, which is what most of the tools out there require and what was also my motivation to start this project. go-uml is using a 2D graphics engine written 100% in Go https://github.com/fogleman/gg
+You don't need to download any dependencies such as plantUML or Graphviz, which is what most of the tools out there require and what was also my motivation to start this project. go-uml is using a [2D graphics engine](https://github.com/fogleman/gg) written 100% in Go 
 
 # How to install
 
@@ -26,7 +26,7 @@ first
 
 # Example
 
-```
+```go
  	d := sequence.NewDiagram("user_starts_chatting")
 
 	client := "Client"
@@ -55,7 +55,7 @@ first
 	d.Render()
 
 ```
-Result PNG file: 
+Resulting PNG file: 
 ![Sequence Diagram generated based on above code](./examples/user_starts_chatting.png)
 
 Some more examples:
