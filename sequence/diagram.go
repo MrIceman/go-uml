@@ -2,9 +2,10 @@ package sequence
 
 import (
 	"fmt"
-	"github.com/fogleman/gg"
 	"image/color"
 	"log"
+
+	"github.com/fogleman/gg"
 )
 
 const (
@@ -21,6 +22,7 @@ const (
 	height = 1000
 )
 
+// Diagram represents a diagram
 type Diagram struct {
 	participants         []participant
 	edges                []edge
@@ -32,6 +34,7 @@ type Diagram struct {
 	filename string
 }
 
+// NewDiagram init function
 func NewDiagram(filename string) *Diagram {
 	coordMap := make(map[string]participantCoord)
 
@@ -41,6 +44,7 @@ func NewDiagram(filename string) *Diagram {
 	}
 }
 
+// Render generates an image from a `Diagram` object
 func (d *Diagram) Render() {
 	d.dc = gg.NewContext(width, height)
 	d.dc.DrawRectangle(0, 0, width, height)
@@ -186,6 +190,7 @@ func (d *Diagram) renderEdges() {
 	}
 }
 
+// AddParticipants sets the `participant` array on the Diagram object
 func (d *Diagram) AddParticipants(name ...string) {
 	for _, n := range name {
 		for i := range d.participants {
@@ -197,6 +202,7 @@ func (d *Diagram) AddParticipants(name ...string) {
 	}
 }
 
+// AddDirectionalEdge adds a connection (renders as an arrowed line) between two participants
 func (d *Diagram) AddDirectionalEdge(from, to string, label string) error {
 	var fromPar *participant
 	var toPar *participant
@@ -219,6 +225,7 @@ func (d *Diagram) AddDirectionalEdge(from, to string, label string) error {
 	return nil
 }
 
+// AddUndirectionalEdge adds a connection (renders as a line) between two participants
 func (d *Diagram) AddUndirectionalEdge(from, to string, label string) error {
 	var fromPar *participant
 	var toPar *participant
@@ -238,6 +245,7 @@ func (d *Diagram) AddUndirectionalEdge(from, to string, label string) error {
 	return nil
 }
 
+// SetTitle sets the diagram's title
 func (d *Diagram) SetTitle(s string) {
 	d.title = s
 }
