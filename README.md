@@ -1,4 +1,10 @@
 # go-uml
+
+[![CI][badge-build]][build]
+[![GoDoc][go-docs-badge]][go-docs]
+[![GoReportCard][go-report-card-badge]][go-report-card]
+[![License][badge-license]][license]
+
 Just a little tool to create UML Diagrams built in Go. You can use it already to build simple sequence diagrams, however, this project is still under development
 and you won't find some functionalities yet such as
 
@@ -65,3 +71,12 @@ Some more examples:
 ## Warning - AI not welcome here
 Because of my own personal philosophy regarding technology and AI, all the code in this repository that was written by me - I wrote 100% on my own. There is and will be no usage of Github Co-Pilot or any other AI tool. I became a software developer because of my passion for our craft - Software Engineering. I build this tool because I enjoy programming. Every single line of code you'll read in this repo, that was written by me, is produced first in my mind and then manifested into reality through my hands. I encourage any contributor to follow the same principle, though I can't and don't want to put any restrictions on this.
 Just like people stopped walking because they commute by cars and trains, which caused an increase in obesity and illness, I believe that the massive usage of AI will cause people to stop thinking and using their minds and the resulting havoc is unthinkable.
+
+[license]: ./LICENSE
+[badge-license]: https://img.shields.io/github/license/MrIceman/go-uml.svg
+[go-docs-badge]: https://godoc.org/github.com/MrIceman/go-uml?status.svg
+[go-docs]: https://godoc.org/github.com/MrIceman/go-uml
+[go-report-card-badge]: https://goreportcard.com/badge/github.com/MrIceman/go-uml
+[go-report-card]: https://goreportcard.com/report/github.com/MrIceman/go-uml
+[badge-build]: https://github.com/MrIceman/go-uml/actions/workflows/go.yml/badge.svg
+[build]: https://github.com/MrIceman/go-uml/actions/workflows/go.yml
