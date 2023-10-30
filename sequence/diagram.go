@@ -78,10 +78,11 @@ func (d *Diagram) renderParticipants() {
 			}
 		}
 		spacePerBlock := float64(d.dc.Width() / len(d.participants))
-		startX := spacePerBlock*float64(len(d.renderedParticipants)+1) - spacePerBlock/2 - participantsPadding
-		// startX := float64(participantsPadding + (len(d.renderedParticipants) * (participantBoxWidth + 1000/(len(d.participants)))))
-		endX := startX + participantBoxWidth
-		startY := 1000 * 0.1 // 10% from the top
+		strWidth, strHeight := d.dc.MeasureString(p.Name)
+		startX := spacePerBlock*float64(len(d.renderedParticipants)+1) - spacePerBlock/2 - participantsPadding - strWidth/2
+
+		endX := startX + participantBoxWidth + strWidth
+		startY := height * 0.1 // 10% from the top
 		endY := startY + participantBoxHeight
 		// draw the border
 		d.dc.SetColor(color.Black)
@@ -104,11 +105,10 @@ func (d *Diagram) renderParticipants() {
 		d.dc.DrawRectangle(
 			startX,
 			startY,
-			participantBoxWidth,
+			participantBoxWidth+strWidth,
 			participantBoxHeight,
 		)
 		d.dc.SetColor(color.Black)
-		strWidth, strHeight := d.dc.MeasureString(p.Name)
 		centerStrWidth := startX + ((endX - startX) / 2) - strWidth/2
 		centerStrHeight := (endY-startY)/2 + startY + (strHeight / 2)
 
@@ -141,11 +141,13 @@ func (d *Diagram) renderEdges() {
 
 	for idx := range d.edges {
 		e := &d.edges[idx]
+		fromStrWidth, _ := d.dc.MeasureString(e.from.Name)
+		toStrWidth, _ := d.dc.MeasureString(e.to.Name)
 		fromCords := d.participantsCoordMap[e.from.Name]
 		toCords := d.participantsCoordMap[e.to.Name]
-		startX := fromCords.X + participantBoxWidth/2 - 2.5 // 2.5 = half of stroke width
+		startX := fromCords.X + participantBoxWidth/2 - 2.5 + fromStrWidth/2 // 2.5 = half of stroke width
 		startY := fromCords.Y + participantBoxHeight + 2.5 + float64((1+renderedEdges)*verticalSpaceBetweenEdges)
-		endX := toCords.X + participantBoxWidth/2 - 2.5
+		endX := toCords.X + participantBoxWidth/2 - 2.5 + toStrWidth/2
 		isReverseEdge := endX < startX
 
 		d.dc.SetDash(6)

@@ -6,7 +6,34 @@ func main() {
 	userStartsChatting()
 	userBIsNotPartOfChat()
 	userBIsPartOfChat()
+	userJoinsChat()
+}
 
+func userJoinsChat() {
+	d := sequence.NewDiagram("new_chat")
+	userA := "userA (name could be quite longer)"
+	userB := "userB"
+	b := "backend"
+
+	d.SetTitle("User starts a chat with someone (doesn't matter if new or not)")
+
+	d.AddParticipants(userA, userB, b)
+
+	_ = d.AddDirectionalEdge(userA, b, `POST /inbox {"recipient": userID, "project": projectID, "projectType": challenge|solution}"`)
+	_ = d.AddDirectionalEdge(b, userA, "Response Status Code: 202, Body: Inbox{id, secret, recipient, ...}")
+	_ = d.AddDirectionalEdge(userA, b, "WS connect")
+	_ = d.AddDirectionalEdge(userA, b, `"{"action": "JOIN", "data": {"inboxId": str, "userId": "str", "inboxSecret": str}}"`)
+	_ = d.AddDirectionalEdge(b, b, "STORE_CONNECTION_ID(userA)")
+	_ = d.AddDirectionalEdge(b, b, "sets unread inbox userA = 0")
+	_ = d.AddDirectionalEdge(b, userA, `{"event": "new_message", "messages": [{"id": str, "inboxId": str, "content": str, "userId": str, "createdAt": str}]}`)
+	_ = d.AddDirectionalEdge(userA, b, `"{"action": "SEND_MESSAGE", "data": {"inboxId": str, "userId": "str", "inboxSecret": str, "content": "hi"}}"`)
+	_ = d.AddDirectionalEdge(b, b, "check connectionID userB")
+	_ = d.AddUndirectionalEdge(b, b, "if connected: ")
+	_ = d.AddDirectionalEdge(b, userB, `{"event": "new_message", "messages": [{"id": str, "inboxId": str, "content": str, "userId": str, "createdAt": str}]}`)
+	_ = d.AddUndirectionalEdge(b, b, "else: ")
+	_ = d.AddUndirectionalEdge(b, b, "increment unread inbox userB")
+
+	d.Render()
 }
 
 func userBIsPartOfChat() {
@@ -71,6 +98,7 @@ func userStartsChatting() {
 	d.AddParticipants(backend)
 	d.AddParticipants(db)
 
+	d.AddDirectionalEdge(client, backend, "GET /inbox/<TO_ID>")
 	d.AddDirectionalEdge(client, backend, "PUT /chat/user/<TO_ID>")
 	d.AddDirectionalEdge(backend, db, "checks or create inbox for user")
 	d.AddDirectionalEdge(backend, db, "set all unread messages to read if existing")
