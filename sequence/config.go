@@ -8,6 +8,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+
+// Edge represents an Edge on a Sequence Diagram
 type Edge struct {
 	From  string `yaml:"from"`
 	To    string `yaml:"to"`
@@ -21,6 +23,7 @@ type config struct {
 	Edges        []Edge   `yaml:"edges"`
 }
 
+// DiagramFromYaml create a Diagram from a YAML file 
 func DiagramFromYaml(file string) (*Diagram, error) {
 	var cfg config
 	name := strings.TrimSuffix(file, ".yaml")
