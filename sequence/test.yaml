@@ -1,0 +1,11 @@
+title: "example"
+partecipants: ["alice", "bob"]
+edges:
+  - from: "alice"
+    to: "bob"
+    label: "sending"
+    type: "->"
+  - from: "bob"
+    to: "alice"
+    label: "receaving"
+    type: "->"
